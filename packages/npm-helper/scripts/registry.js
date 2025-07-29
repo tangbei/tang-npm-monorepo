@@ -48,15 +48,19 @@ function showAvailableRegistries() {
 	console.log('   地址: https://registry.npmmirror.com/');
 	console.log('   特点: 国内访问速度快，同步及时');
 	console.log('');
-	console.log('3. 腾讯镜像源');
+  console.log('3. 铭师堂镜像源');
+	console.log('   地址: https://tip-npm.mistong.com/');
+	console.log('   特点: 国内访问速度快，同步及时');
+	console.log('');
+	console.log('4. 腾讯镜像源');
 	console.log('   地址: https://mirrors.cloud.tencent.com/npm/');
 	console.log('   特点: 腾讯云提供，稳定性好');
 	console.log('');
-	console.log('4. 华为镜像源');
+	console.log('5. 华为镜像源');
 	console.log('   地址: https://mirrors.huaweicloud.com/repository/npm/');
 	console.log('   特点: 华为云提供，企业级服务');
 	console.log('');
-	console.log('5. 自定义registry');
+	console.log('6. 自定义registry');
 	console.log('   可以设置任何符合npm规范的registry地址');
 }
 
@@ -69,6 +73,7 @@ async function quickSwitchRegistry(registryName) {
 	const registryMap = {
 		'npm': 'https://registry.npmjs.org/',
 		'taobao': 'https://registry.npmmirror.com/',
+    'mistong': 'https://tip-npm.mistong.com/',
 		'tencent': 'https://mirrors.cloud.tencent.com/npm/',
 		'huawei': 'https://mirrors.huaweicloud.com/repository/npm/'
 	};
@@ -98,6 +103,7 @@ async function selectRegistry() {
 			choices: [
 				{ name: 'npm官方源 (https://registry.npmjs.org/)', value: 'https://registry.npmjs.org/' },
 				{ name: '淘宝镜像源 (https://registry.npmmirror.com/)', value: 'https://registry.npmmirror.com/' },
+				{ name: '铭师堂镜像源 (https://tip-npm.mistong.com/)', value: 'https://tip-npm.mistong.com/' },
 				{ name: '腾讯镜像源 (https://mirrors.cloud.tencent.com/npm/)', value: 'https://mirrors.cloud.tencent.com/npm/' },
 				{ name: '华为镜像源 (https://mirrors.huaweicloud.com/repository/npm/)', value: 'https://mirrors.huaweicloud.com/repository/npm/' },
 				{ name: '自定义registry', value: 'custom' }
