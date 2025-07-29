@@ -40,6 +40,21 @@ function getCurrentVersion() {
 }
 
 /**
+ * 获取下一个patch版本号
+ * @param {string} currentVersion 当前版本号
+ * @returns {string} 下一个patch版本号
+ */
+function getNextPatchVersion(currentVersion) {
+	const versionParts = currentVersion.split('.');
+	if (versionParts.length >= 3) {
+		const patch = parseInt(versionParts[2]) + 1;
+		return `${versionParts[0]}.${versionParts[1]}.${patch}`;
+	}
+	// 如果版本号格式不正确，返回当前版本
+	return currentVersion;
+}
+
+/**
  * 选择版本类型
  * @param {string} currentVersion 当前版本
  * @param {string} latestVersion 最新版本
@@ -59,6 +74,8 @@ async function selectVersionType(currentVersion, latestVersion) {
 				{ name: '补丁版本 (patch) - 1.0.0 → 1.0.1', value: 'patch' },
 				{ name: '次要版本 (minor) - 1.0.0 → 1.1.0', value: 'minor' },
 				{ name: '主要版本 (major) - 1.0.0 → 2.0.0', value: 'major' },
+				{ name: 'Beta版本 (beta) - 1.0.0 → 1.0.1-beta.1', value: 'beta' },
+				{ name: 'Alpha版本 (alpha) - 1.0.0 → 1.0.1-alpha.1', value: 'alpha' },
 				{ name: '自定义版本', value: 'custom' }
 			]
 		}
@@ -69,16 +86,39 @@ async function selectVersionType(currentVersion, latestVersion) {
 			{
 				type: 'input',
 				name: 'customVersion',
-				message: '请输入自定义版本号 (格式: x.y.z):',
+				message: '请输入自定义版本号 (格式: x.y.z 或 x.y.z-beta.n 或 x.y.z-alpha.n):',
 				validate: (input) => {
-					if (/^\d+\.\d+\.\d+$/.test(input)) {
+					// 支持标准版本号和预发布版本号
+					if (/^\d+\.\d+\.\d+(-\w+\.\d+)?$/.test(input)) {
 						return true;
 					}
-					return '请输入有效的版本号格式 (x.y.z)';
+					return '请输入有效的版本号格式 (x.y.z 或 x.y.z-beta.n 或 x.y.z-alpha.n)';
 				}
 			}
 		]);
 		return customVersion;
+	}
+	
+	// 处理beta和alpha版本
+	if (versionType === 'beta' || versionType === 'alpha') {
+		const { prereleaseNumber } = await inquirer.prompt([
+			{
+				type: 'input',
+				name: 'prereleaseNumber',
+				message: `请输入${versionType}版本号 (默认为1):`,
+				default: '1',
+				validate: (input) => {
+					if (/^\d+$/.test(input)) {
+						return true;
+					}
+					return '请输入有效的数字';
+				}
+			}
+		]);
+		
+		// 生成预发布版本号
+		const baseVersion = getNextPatchVersion(currentVersion);
+		return `${baseVersion}-${versionType}.${prereleaseNumber}`;
 	}
 	
 	return versionType;
@@ -113,6 +153,7 @@ async function updateVersion(versionType) {
 module.exports = {
 	getLatestVersion,
 	getCurrentVersion,
+	getNextPatchVersion,
 	selectVersionType,
 	updateVersion,
 	packageName
