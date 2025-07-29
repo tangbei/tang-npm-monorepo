@@ -4,7 +4,7 @@
   "description": "一个用于一键自动tag、发包、引导登录npm的工具",
   "main": "src/index.js",
   "scripts": {
-    "release": "node ./src/index.js publish",
+    "release": "node ./scripts/release.js",
     "check": "node ./src/index.js check",
     "registry": "node ./src/index.js registry"
   },
