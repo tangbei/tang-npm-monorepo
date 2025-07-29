@@ -27,10 +27,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/tang-npm.git"
+    "url": "https://github.com/tangbei/tang-npm-monorepo/tree/main/packages/npm-helper"
   },
   "bugs": {
-    "url": "https://github.com/your-username/tang-npm/issues"
+    "url": "https://github.com/tangbei/tang-npm-monorepo/issues"
   },
-  "homepage": "https://github.com/your-username/tang-npm#readme"
+  "homepage": "https://github.com/tangbei/tang-npm-monorepo/blob/main/packages/npm-helper/README.md"
 }
