@@ -1,0 +1,26 @@
+{
+  "name": "@tanggoat/tang-other",
+  "version": "1.0.0",
+  "description": "tang-other 项目包",
+  "main": "index.js",
+  "scripts": {
+    "check": "npm-helper check",
+    "release": "npm-helper release",
+    "registry": "node ../npm-helper/src/index.js registry"
+  },
+  "keywords": ["tang", "other", "utility"],
+  "author": "tangbei",
+  "license": "ISC",
+  "dependencies": {
+    "@tanggoat/npm-helper": "workspace:*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tangbei/tang-npm-monorepo.git",
+    "directory": "packages/tang-other"
+  },
+  "bugs": {
+    "url": "https://github.com/tangbei/tang-npm-monorepo/issues"
+  },
+  "homepage": "https://github.com/tangbei/tang-npm-monorepo/blob/main/packages/tang-other/README.md"
+}
