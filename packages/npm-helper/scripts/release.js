@@ -29,6 +29,13 @@ async function selectRegistry() {
 	const currentRegistry = await getCurrentRegistry();
 	console.log(`\n📦 当前npm registry: ${currentRegistry}`);
 	
+	// 检查包名是否为私有包
+	const isPrivatePackage = packageName.startsWith('@');
+	if (isPrivatePackage) {
+		console.log('⚠️  检测到私有包名，npm官方源需要付费订阅才能发布私有包');
+		console.log('💡 建议使用淘宝镜像源或其他支持免费私有包的registry');
+	}
+	
 	const { registry } = await inquirer.prompt([
 		{
 			type: 'list',
