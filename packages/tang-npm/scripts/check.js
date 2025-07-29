@@ -12,7 +12,7 @@ const execAsync = util.promisify(exec);
 async function checkNodeVersion() {
 	try {
 		const { stdout } = await execAsync('node --version');
-		const version = stdout.trim();
+		const version = String(stdout || '').trim();
 		console.log(`✅ Node.js版本: ${version}`);
 		
 		// 检查是否为LTS版本
@@ -33,7 +33,7 @@ async function checkNodeVersion() {
 async function checkNpmVersion() {
 	try {
 		const { stdout } = await execAsync('npm --version');
-		const version = stdout.trim();
+		const version = String(stdout || '').trim();
 		console.log(`✅ npm版本: ${version}`);
 	} catch (error) {
 		console.error('❌ 无法获取npm版本:', error.message);
@@ -48,8 +48,8 @@ async function checkGitConfig() {
 		const { stdout: name } = await execAsync('git config user.name');
 		const { stdout: email } = await execAsync('git config user.email');
 		console.log(`✅ Git配置:`);
-		console.log(`   用户名: ${name.trim()}`);
-		console.log(`   邮箱: ${email.trim()}`);
+		console.log(`   用户名: ${String(name || '').trim()}`);
+		console.log(`   邮箱: ${String(email || '').trim()}`);
 	} catch (error) {
 		console.error('❌ Git配置不完整:', error.message);
 		console.log('请运行以下命令配置Git:');
@@ -64,9 +64,10 @@ async function checkGitConfig() {
 async function checkRemoteRepository() {
 	try {
 		const { stdout } = await execAsync('git remote -v');
-		if (stdout.trim()) {
+		const output = String(stdout || '').trim();
+		if (output) {
 			console.log('✅ 远程仓库配置:');
-			console.log(stdout);
+			console.log(output);
 		} else {
 			console.log('❌ 未配置远程仓库');
 		}

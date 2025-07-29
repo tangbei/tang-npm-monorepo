@@ -21,8 +21,9 @@ try {
 async function getLatestVersion() {
 	try {
 		const {stdout} = await exec(`npm show ${packageName} version`);
-		const latestVersion = stdout.trim().replace(/^v/, ''); // 删除可能存在的前导 v
-		return latestVersion;
+		// 确保stdout是字符串类型
+		const output = String(stdout || '').trim().replace(/^v/, ''); // 删除可能存在的前导 v
+		return output;
 	} catch (error) {
 		console.error(`❌ 获取最新版本失败: ${error.message}`);
 		throw error; // 抛出错误，以便可以在调用此函数的地方捕获并处理

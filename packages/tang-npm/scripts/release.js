@@ -14,7 +14,7 @@ const execAsync = util.promisify(exec);
 async function checkNpmLogin() {
 	try {
 		const { stdout } = await execAsync('npm whoami');
-		const username = stdout.trim();
+		const username = String(stdout || '').trim();
 		console.log(`✅ 已登录npm，用户名: ${username}`);
 		return true;
 	} catch (error) {
@@ -62,10 +62,11 @@ async function loginToNpm() {
 async function checkGitStatus() {
 	try {
 		const { stdout } = await execAsync('git status --porcelain');
-		if (stdout.trim()) {
+		const output = String(stdout || '').trim();
+		if (output) {
 			console.log('❌ 有未提交的更改，请先提交更改');
 			console.log('未提交的文件:');
-			console.log(stdout);
+			console.log(output);
 			return false;
 		}
 		console.log('✅ git工作区干净');
@@ -83,7 +84,7 @@ async function checkGitStatus() {
 async function checkGitBranch() {
 	try {
 		const { stdout } = await execAsync('git branch --show-current');
-		const currentBranch = stdout.trim();
+		const currentBranch = String(stdout || '').trim();
 		
 		if (currentBranch !== 'main' && currentBranch !== 'master') {
 			console.log(`⚠️  当前分支: ${currentBranch}`);
@@ -162,11 +163,11 @@ async function updateVersion(versionType) {
 		
 		if (versionType === 'patch' || versionType === 'minor' || versionType === 'major') {
 			const { stdout } = await execAsync(`npm version ${versionType} --no-git-tag-version`);
-			newVersion = stdout.trim().replace(/^v/, '');
+			newVersion = String(stdout || '').trim().replace(/^v/, '');
 		} else {
 			// 自定义版本
 			const { stdout } = await execAsync(`npm version ${versionType} --no-git-tag-version`);
-			newVersion = stdout.trim().replace(/^v/, '');
+			newVersion = String(stdout || '').trim().replace(/^v/, '');
 		}
 		
 		console.log(`✅ 版本已更新为: ${newVersion}`);
@@ -309,5 +310,3 @@ module.exports = {
 	createGitTag,
 	publishToNpm
 };
-
-main();
