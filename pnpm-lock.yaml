@@ -17,6 +17,12 @@ importers:
       tsup: 8.5.0_typescript@5.8.3
       typescript: 5.8.3
 
+  packages/npm-helper:
+    specifiers:
+      inquirer: ^8.2.6
+    dependencies:
+      inquirer: 8.2.6
+
   packages/tang-cli:
     specifiers:
       '@types/commander': ^2.12.5
@@ -36,11 +42,11 @@ importers:
       '@types/commander': 2.12.5
       '@types/inquirer': 9.0.8
 
-  packages/tang-npm:
+  packages/tang-other:
     specifiers:
-      inquirer: ^8.2.6
+      '@tanggoat/npm-helper': workspace:*
     dependencies:
-      inquirer: 8.2.6
+      '@tanggoat/npm-helper': link:../npm-helper
 
 packages:
 

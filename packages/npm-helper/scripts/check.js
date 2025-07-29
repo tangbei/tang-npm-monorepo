@@ -2,7 +2,6 @@ const { exec } = require('child_process');
 const util = require('util');
 const fs = require('fs');
 const path = require('path');
-const { getLatestVersion, getCurrentVersion, packageName } = require('./version');
 
 const execAsync = util.promisify(exec);
 
@@ -81,7 +80,8 @@ async function checkRemoteRepository() {
  */
 function checkPackageJson() {
 	try {
-		const packageJsonPath = path.join(__dirname, '../package.json');
+		// 修改为读取当前工作目录下的 package.json
+		const packageJsonPath = path.join(process.cwd(), 'package.json');
 		const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 		
 		console.log('✅ package.json配置检查:');

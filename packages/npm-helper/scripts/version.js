@@ -8,7 +8,8 @@ const execAsync = util.promisify(exec);
 // 获取package.json中的包名
 let packageJson, packageName;
 try {
-	const packageJsonPath = path.join(__dirname, '../package.json');
+	// 修改为读取当前工作目录下的 package.json
+	const packageJsonPath = path.join(process.cwd(), 'package.json');
 	packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 	packageName = packageJson.name;
 } catch (error) {

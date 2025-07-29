@@ -3,6 +3,9 @@
   "version": "1.0.8-beta.1",
   "description": "一个用于一键自动tag、发包、引导登录npm的工具",
   "main": "src/index.js",
+  "bin": {
+    "npm-helper": "src/index.js"
+  },
   "scripts": {
     "release": "node ./src/index.js publish",
     "check": "node ./src/index.js check",
