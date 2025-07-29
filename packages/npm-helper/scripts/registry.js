@@ -152,7 +152,7 @@ async function testRegistry(registry) {
 /**
  * 主函数
  */
-async function main() {
+async function mainOptions() {
 	const command = process.argv[2];
 	
 	switch (command) {
@@ -204,6 +204,7 @@ async function main() {
 			console.log('快速切换选项:');
 			console.log('  npm      - npm官方源');
 			console.log('  taobao   - 淘宝镜像源');
+      console.log('  mistong  - 铭师堂镜像源');
 			console.log('  tencent  - 腾讯镜像源');
 			console.log('  huawei   - 华为镜像源');
 			console.log('');
@@ -215,6 +216,22 @@ async function main() {
 	}
 }
 
+async function main() {
+  try {
+    // 1. 选择npm registry
+		console.log('📦 配置npm registry...');
+		const selectedRegistry = await selectRegistry();
+		const registrySet = await setRegistry(selectedRegistry);
+		if (!registrySet) {
+			console.log('❌ 无法设置npm registry，退出发布流程');
+			return;
+		}
+  } catch (error) {
+    console.error('❌ 配置npm registry失败:', error.message);
+    process.exit(1);
+  }
+}
+
 // 如果直接运行此脚本
 if (require.main === module) {
 	main();
@@ -222,6 +239,7 @@ if (require.main === module) {
 
 module.exports = {
   main,
+  mainOptions,
 	getCurrentRegistry,
 	setRegistry,
 	selectRegistry,
