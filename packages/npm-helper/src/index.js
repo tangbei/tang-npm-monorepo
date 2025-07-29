@@ -1,26 +1,50 @@
 #!/usr/bin/env node
 
 /**
- * tang-npm - 一键自动tag、发包、引导登录npm的工具
+ * npm-helper - 一键自动tag、发包、引导登录npm的工具
  * 
  * 提供完整的npm包发布流程自动化工具
  */
 
-const { main: release } = require('../scripts/release');
+const { main: releaseMain } = require('../scripts/release');
 const { checkPublishReadiness } = require('../scripts/check');
+const { main: registryMain } = require('../scripts/registry');
 
 /**
- * 检查发布环境
+ * 发布方法 - 主入口
  */
-function check() {
-	return checkPublishReadiness();
+async function publish() {
+	try {
+		console.log('🚀 npm-helper 发布工具启动...\n');
+		await releaseMain();
+	} catch (error) {
+		console.error('❌ 发布过程中发生错误:', error.message);
+		process.exit(1);
+	}
 }
 
 /**
- * 执行发布流程
+ * 检查方法
  */
-function publish() {
-	return release();
+async function check() {
+	try {
+		await checkPublishReadiness();
+	} catch (error) {
+		console.error('❌ 检查过程中发生错误:', error.message);
+		process.exit(1);
+	}
+}
+
+/**
+ * Registry管理方法
+ */
+async function registry() {
+	try {
+		await registryMain();
+	} catch (error) {
+		console.error('❌ Registry管理过程中发生错误:', error.message);
+		process.exit(1);
+	}
 }
 
 // 如果直接运行此文件
@@ -31,26 +55,19 @@ if (require.main === module) {
 		case 'check':
 			check();
 			break;
-		case 'release':
-		case 'publish':
-			publish();
+		case 'registry':
+			registry();
 			break;
+		case 'publish':
+		case 'release':
 		default:
-			console.log('tang-npm - 一键自动tag、发包、引导登录npm的工具');
-			console.log('');
-			console.log('使用方法:');
-			console.log('  node index.js check    检查发布环境');
-			console.log('  node index.js release  执行发布流程');
-			console.log('');
-			console.log('或者使用npm脚本:');
-			console.log('  npm run check    检查发布环境');
-			console.log('  npm run release  执行发布流程');
+			publish();
 			break;
 	}
 }
 
 module.exports = {
-	check,
 	publish,
-	release
+	check,
+	registry
 }; 

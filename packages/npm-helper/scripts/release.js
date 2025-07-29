@@ -3,7 +3,7 @@ const util = require('util');
 const inquirer = require('inquirer');
 const fs = require('fs');
 const path = require('path');
-const { getLatestVersion, getCurrentVersion, packageName } = require('./version');
+const { getLatestVersion, getCurrentVersion, packageName, selectVersionType, updateVersion } = require('./version');
 const { selectRegistry, setRegistry } = require('./registry');
 
 const execAsync = util.promisify(exec);
@@ -105,77 +105,6 @@ async function checkGitBranch() {
 	} catch (error) {
 		console.error('❌ 检查git分支失败:', error.message);
 		return false;
-	}
-}
-
-/**
- * 选择版本类型
- * @param {string} currentVersion 当前版本
- * @param {string} latestVersion 最新版本
- * @returns {Promise<string>}
- */
-async function selectVersionType(currentVersion, latestVersion) {
-	console.log(`\n📦 版本信息:`);
-	console.log(`   当前版本: ${currentVersion}`);
-	console.log(`   最新版本: ${latestVersion}`);
-	
-	const { versionType } = await inquirer.prompt([
-		{
-			type: 'list',
-			name: 'versionType',
-			message: '选择版本更新类型:',
-			choices: [
-				{ name: '补丁版本 (patch) - 1.0.0 → 1.0.1', value: 'patch' },
-				{ name: '次要版本 (minor) - 1.0.0 → 1.1.0', value: 'minor' },
-				{ name: '主要版本 (major) - 1.0.0 → 2.0.0', value: 'major' },
-				{ name: '自定义版本', value: 'custom' }
-			]
-		}
-	]);
-	
-	if (versionType === 'custom') {
-		const { customVersion } = await inquirer.prompt([
-			{
-				type: 'input',
-				name: 'customVersion',
-				message: '请输入自定义版本号 (格式: x.y.z):',
-				validate: (input) => {
-					if (/^\d+\.\d+\.\d+$/.test(input)) {
-						return true;
-					}
-					return '请输入有效的版本号格式 (x.y.z)';
-				}
-			}
-		]);
-		return customVersion;
-	}
-	
-	return versionType;
-}
-
-/**
- * 更新版本号
- * @param {string} versionType 版本类型
- * @returns {Promise<string>}
- */
-async function updateVersion(versionType) {
-	try {
-		let newVersion;
-		
-		if (versionType === 'patch' || versionType === 'minor' || versionType === 'major') {
-			const { stdout } = await execAsync(`npm version ${versionType} --no-git-tag-version`);
-			newVersion = String(stdout || '').trim().replace(/^v/, '');
-		} else {
-			// 自定义版本
-			const { stdout } = await execAsync(`npm version ${versionType} --no-git-tag-version`);
-			newVersion = String(stdout || '').trim().replace(/^v/, '');
-		}
-		
-		console.log(`✅ 版本已更新为: ${newVersion}`);
-		return newVersion;
-	} catch (error) {
-		console.error('❌ 更新版本失败:', error.message);
-		throw error;
 	}
 }
 
@@ -320,14 +249,10 @@ if (require.main === module) {
 
 module.exports = {
 	main,
-	selectRegistry,
-	setRegistry,
 	checkNpmLogin,
 	loginToNpm,
 	checkGitStatus,
 	checkGitBranch,
-	selectVersionType,
-	updateVersion,
 	createGitTag,
 	publishToNpm
 };

@@ -221,6 +221,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+  main,
 	getCurrentRegistry,
 	setRegistry,
 	selectRegistry,
