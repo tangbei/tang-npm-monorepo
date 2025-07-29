@@ -4,89 +4,9 @@ const inquirer = require('inquirer');
 const fs = require('fs');
 const path = require('path');
 const { getLatestVersion, getCurrentVersion, packageName } = require('./version');
+const { selectRegistry, setRegistry } = require('./registry');
 
 const execAsync = util.promisify(exec);
-
-/**
- * 获取当前npm registry
- * @returns {Promise<string>}
- */
-async function getCurrentRegistry() {
-	try {
-		const { stdout } = await execAsync('npm config get registry');
-		return String(stdout || '').trim();
-	} catch (error) {
-		console.error('❌ 获取当前npm registry失败:', error.message);
-		return 'https://registry.npmjs.org/';
-	}
-}
-
-/**
- * 选择npm registry
- * @returns {Promise<string>}
- */
-async function selectRegistry() {
-	const currentRegistry = await getCurrentRegistry();
-	console.log(`\n📦 当前npm registry: ${currentRegistry}`);
-	
-	// 检查包名是否为私有包
-	const isPrivatePackage = packageName.startsWith('@');
-	if (isPrivatePackage) {
-		console.log('⚠️  检测到私有包名，npm官方源需要付费订阅才能发布私有包');
-		console.log('💡 建议使用淘宝镜像源或其他支持免费私有包的registry');
-	}
-	
-	const { registry } = await inquirer.prompt([
-		{
-			type: 'list',
-			name: 'registry',
-			message: '选择npm registry:',
-			choices: [
-				{ name: 'npm官方源 (https://registry.npmjs.org/)', value: 'https://registry.npmjs.org/' },
-				{ name: '淘宝镜像源 (https://registry.npmmirror.com/)', value: 'https://registry.npmmirror.com/' },
-				{ name: '腾讯镜像源 (https://mirrors.cloud.tencent.com/npm/)', value: 'https://mirrors.cloud.tencent.com/npm/' },
-				{ name: '华为镜像源 (https://mirrors.huaweicloud.com/repository/npm/)', value: 'https://mirrors.huaweicloud.com/repository/npm/' },
-				{ name: '自定义registry', value: 'custom' }
-			]
-		}
-	]);
-	
-	if (registry === 'custom') {
-		const { customRegistry } = await inquirer.prompt([
-			{
-				type: 'input',
-				name: 'customRegistry',
-				message: '请输入自定义registry地址:',
-				default: 'https://registry.npmjs.org/',
-				validate: (input) => {
-					if (input.startsWith('http://') || input.startsWith('https://')) {
-						return true;
-					}
-					return '请输入有效的URL地址';
-				}
-			}
-		]);
-		return customRegistry;
-	}
-	
-	return registry;
-}
-
-/**
- * 设置npm registry
- * @param {string} registry registry地址
- * @returns {Promise<boolean>}
- */
-async function setRegistry(registry) {
-	try {
-		await execAsync(`npm config set registry ${registry}`);
-		console.log(`✅ npm registry已设置为: ${registry}`);
-		return true;
-	} catch (error) {
-		console.error('❌ 设置npm registry失败:', error.message);
-		return false;
-	}
-}
 
 /**
  * 检查npm是否已登录
@@ -400,7 +320,6 @@ if (require.main === module) {
 
 module.exports = {
 	main,
-	getCurrentRegistry,
 	selectRegistry,
 	setRegistry,
 	checkNpmLogin,
