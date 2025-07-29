@@ -285,7 +285,7 @@ async function createGitTag(version) {
 async function publishToNpm() {
 	try {
 		console.log('🚀 正在发布到npm...');
-		await execAsync('npm publish');
+		await execAsync('npm publish --access public');
 		console.log('✅ 发布成功！');
 	} catch (error) {
 		console.error('❌ 发布失败:', error.message);
