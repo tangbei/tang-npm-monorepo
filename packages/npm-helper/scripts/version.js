@@ -3,6 +3,7 @@ const util = require('util');
 const fs = require('fs');
 const path = require('path');
 const inquirer = require('inquirer');
+const execAsync = util.promisify(exec);
 
 // 获取package.json中的包名
 let packageJson, packageName;
