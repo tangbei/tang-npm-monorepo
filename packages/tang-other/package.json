@@ -1,6 +1,6 @@
 {
   "name": "@tanggoat/tang-other",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "tang-other 项目包",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,11 @@
     "release": "npm-helper release",
     "registry": "node ../npm-helper/src/index.js registry"
   },
-  "keywords": ["tang", "other", "utility"],
+  "keywords": [
+    "tang",
+    "other",
+    "utility"
+  ],
   "author": "tangbei",
   "license": "ISC",
   "dependencies": {
