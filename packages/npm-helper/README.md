@@ -1,4 +1,4 @@
-# tang-npm
+# npm-helper
 
 一个用于一键自动tag、发包、引导登录npm的工具，简化npm包的发布流程。
 
@@ -14,25 +14,16 @@
 ## 📦 安装
 
 ```bash
-npm install tang-npm
-```
-
-或者克隆项目后安装依赖：
-
-```bash
-git clone <repository-url>
-cd tang-npm
-npm install
+npm install @tanggoat/npm-helper
 ```
 
 ## 🚀 使用方法
 
 ### 1. 检查发布环境
 
-在发布前，建议先检查环境配置：
-
+在发布前，建议先检查环境配置，script配置：
 ```bash
-npm run check
+npm-helper check
 ```
 
 这会检查：
@@ -44,10 +35,10 @@ npm run check
 
 ### 2. 一键发布
 
-运行发布命令：
+增加script配置，运行发布命令：
 
 ```bash
-npm run release
+npm-helper release
 ```
 
 发布流程包括：
@@ -61,11 +52,37 @@ npm run release
 8. 创建git tag并推送
 9. 发布到npm
 
+### 3. 切换npm源
+
+增加script配置，运行发布命令：
+
+```bash
+npm-helper registry
+```
+
+### 4. 完整npm-helper使用
+
+在项目的package.json文件中增加script配置：
+
+```bash
+"release": npm-helper release
+"registry": npm-helper registry
+"check": npm-helper check
+```
+
+切换npm源包括：
+1. 罗列可使用的npm源（npm官方源、淘宝镜像源、腾讯镜像源、华为镜像源等）
+2. 并可自定义npm源
+3. 无需记忆源地址信息，满足一键切换
+
+
 ## 📋 版本更新类型
 
 - **patch**: 补丁版本 (1.0.0 → 1.0.1) - 修复bug
 - **minor**: 次要版本 (1.0.0 → 1.1.0) - 新功能，向后兼容
 - **major**: 主要版本 (1.0.0 → 2.0.0) - 破坏性更新
+- **beta**: Beta版本 (beta) - 1.0.0 → 1.0.1-beta.1 公开测试版本
+- **alpha**: Alpha版本 (alpha) - 1.0.0 → 1.0.1-alpha.1 内部测试版本
 - **custom**: 自定义版本 - 手动输入版本号
 
 ## 🔧 配置要求
@@ -78,7 +95,12 @@ npm run release
   "version": "1.0.0",
   "description": "包描述",
   "main": "index.js",
-  "license": "ISC"
+  "license": "ISC",
+  "script": {
+    "release": "npm-helper release",
+    "registry": "npm-helper registry",
+    "check": "npm-helper check"
+  }
 }
 ```
 

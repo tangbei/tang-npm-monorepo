@@ -6,7 +6,7 @@
   "scripts": {
     "check": "npm-helper check",
     "release": "npm-helper release",
-    "registry": "node ../npm-helper/src/index.js registry"
+    "registry": "npm-helper registry"
   },
   "keywords": [
     "tang",
