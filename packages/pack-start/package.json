@@ -1,0 +1,41 @@
+{
+  "name": "@tanggoat/pack-start",
+  "version": "1.0.0",
+  "description": "基于webpack的前端脚手架工具",
+  "main": "dist/bin/cli.js",
+  "bin": {
+    "pack-start": "dist/bin/cli.js"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "release": "pnpm build && npm-helper release"
+  },
+  "keywords": [
+    "webpack",
+    "react",
+    "typescript",
+    "scaffold",
+    "cli",
+    "脚手架"
+  ],
+  "author": "tanggoat",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "ejs": "^3.1.9",
+    "execa": "^5.1.1",
+    "figlet": "^1.7.0",
+    "fs-extra": "^11.1.1",
+    "inquirer": "^8.2.6",
+    "mkdirp": "^3.0.1",
+    "ora": "^5.4.1"
+  },
+  "devDependencies": {
+    "@tanggoat/npm-helper": "workspace:1.0.10-beta.3",
+    "@types/node": "^20.10.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
