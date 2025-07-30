@@ -33,15 +33,15 @@ async function build() {
     const templatesDest = path.join(buildDir, 'templates');
     await fs.copy(templatesSrc, templatesDest);
     
-    // 复制package.json
-    const packageSrc = path.join(__dirname, '..', 'package.json');
-    const packageDest = path.join(buildDir, 'package.json');
-    await fs.copy(packageSrc, packageDest);
+    // // 复制package.json
+    // const packageSrc = path.join(__dirname, '..', 'package.json');
+    // const packageDest = path.join(buildDir, 'package.json');
+    // await fs.copy(packageSrc, packageDest);
     
-    // 复制README.md
-    const readmeSrc = path.join(__dirname, '..', 'README.md');
-    const readmeDest = path.join(buildDir, 'README.md');
-    await fs.copy(readmeSrc, readmeDest);
+    // // 复制README.md
+    // const readmeSrc = path.join(__dirname, '..', 'README.md');
+    // const readmeDest = path.join(buildDir, 'README.md');
+    // await fs.copy(readmeSrc, readmeDest);
     
     console.log('✅ 构建完成！构建文件已输出到 dist 目录');
     
