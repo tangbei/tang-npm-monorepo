@@ -16,6 +16,14 @@ async function build() {
     
     // 创建构建输出目录
     const buildDir = path.join(__dirname, '..', 'dist');
+    
+    // 检查dist目录是否存在，如果存在则删除
+    if (await fs.pathExists(buildDir)) {
+      console.log('🗑️  删除已存在的dist目录...');
+      await fs.remove(buildDir);
+    }
+    
+    // 创建新的dist目录
     await fs.ensureDir(buildDir);
     
     // 复制bin目录
