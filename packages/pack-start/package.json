@@ -1,6 +1,6 @@
 {
   "name": "@tanggoat/pack-start",
-  "version": "1.0.3-beta.4",
+  "version": "1.0.3-beta.5",
   "description": "基于webpack的前端脚手架工具",
   "main": "dist/bin/cli.js",
   "bin": {
