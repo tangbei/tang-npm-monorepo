@@ -1,6 +1,6 @@
 {
   "name": "@tanggoat/tang-other",
-  "version": "1.0.5-beta.1",
+  "version": "1.0.6-beta.2",
   "description": "tang-other 项目包",
   "main": "index.js",
   "scripts": {
