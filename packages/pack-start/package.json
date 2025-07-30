@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "node scripts/build.js",
-    "release": "pnpm build && npm-helper release"
+    "release": "pnpm build && cd ../.. && npm-helper release"
   },
   "keywords": [
     "webpack",
