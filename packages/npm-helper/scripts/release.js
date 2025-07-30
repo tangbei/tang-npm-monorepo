@@ -114,16 +114,28 @@ async function checkGitBranch() {
  * @returns {Promise<void>}
  */
 async function createGitTag(version) {
+	await execAsync(`git add .`);
 	try {
-		await execAsync(`git add .`);
 		await execAsync(`git commit -m "chore: bump version to ${version}"`);
+	} catch (error) {
+		console.error('❌ 创建git tag失败1:', error.message);
+		throw error;
+	}
+	try {
 		await execAsync(`git tag v${version}`);
+	} catch (error) {
+		console.error('❌ 创建git tag失败2:', error.message);
+	}
+	try {
 		await execAsync(`git push origin HEAD`);
+	} catch (error) {
+		console.error('❌ 创建git tag失败3:', error.message);
+	}
+	try {
 		await execAsync(`git push origin v${version}`);
 		console.log(`✅ Git tag v${version} 已创建并推送`);
 	} catch (error) {
-		console.error('❌ 创建git tag失败:', error.message);
-		throw error;
+		console.error('❌ 创建git tag失败4:', error.message);
 	}
 }
 
