@@ -11,12 +11,11 @@ const chalk = require('chalk');
 const figlet = require('figlet');
 const path = require('path');
 
-// 动态确定lib目录路径
+// 动态确定lib目录路径 
 const libPath = path.join(__dirname, '..', 'lib');
 const { createProject } = require(libPath + '/create');
 
-// 获取版本信息
-const packageJson = require(path.join(__dirname, '..', 'package.json'));
+const packageJson = require(path.join(__dirname, '..', '..', 'package.json'));
 
 // 创建命令行程序实例
 const program = new Command();
