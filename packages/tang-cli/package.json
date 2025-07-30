@@ -1,25 +1,40 @@
 {
-  "name": "@tang/cli",
+  "name": "@tanggoat/tang-cli",
   "version": "1.0.0",
-  "description": "",
+  "description": "A modern frontend project scaffolding tool supporting React and Vue templates",
   "main": "index.js",
-  "start": ".bin/index.ts",
+  "bin": {
+    "tang-cli": "./bin/index.js"
+  },
   "type": "module",
   "scripts": {
-    "start": "node bin/index.js"
+    "start": "node bin/index.js",
+    "build": "echo 'No build step required'"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "cli",
+    "scaffold",
+    "react",
+    "vue",
+    "typescript",
+    "vite",
+    "frontend"
+  ],
+  "author": "TangGoat Team",
   "license": "ISC",
   "dependencies": {
     "chalk": "^5.4.1",
     "commander": "^14.0.0",
     "execa": "^9.6.0",
+    "fs-extra": "^11.2.0",
     "inquirer": "^12.8.2",
     "mkdirp": "^3.0.1"
   },
   "devDependencies": {
     "@types/commander": "^2.12.5",
     "@types/inquirer": "^9.0.8"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }

@@ -11,6 +11,7 @@ const commands = () => {
 
     // 创建项目
     create(program, (item) => {
+      console.log('item--', item);
       resolve(item);
     });
     // 帮助信息

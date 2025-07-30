@@ -1,7 +1,18 @@
 export function hasTemplate(template) {
-  return ['vue', 'vue-ts', 'react', 'react-ts'].includes(template)
+  return ['react', 'react-ts'].includes(template)
 }
 
 export function getSupportTs(template) {
-  return ['vue-ts', 'react-ts'].includes(template)
+  return ['react-ts'].includes(template)
 }
+
+export function getFramework(template) {
+  if (template.startsWith('react')) return 'react'
+  return 'react'
+}
+
+export function isTypeScript(template) {
+  return template.endsWith('-ts')
+}
+
+export { generateTemplate } from './template-generator.js';

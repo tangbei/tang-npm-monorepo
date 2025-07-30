@@ -8,12 +8,14 @@ export const changeTemplate = () => {
     name: 'template',
     choices: [
       {
-        name: 'react',
+        name: 'React + JavaScript',
+        value: 'react'
       },
       {
-        name: 'vue',
-      },
+        name: 'React + TypeScript',
+        value: 'react-ts'
+      }
     ],
-    message: 'Select a framework',
+    message: 'Select a framework and variant',
   };
 };
