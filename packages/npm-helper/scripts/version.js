@@ -57,6 +57,28 @@ function getNextPatchVersion(currentVersion) {
 }
 
 /**
+ * 获取下一个预发布版本号
+ * @param {string} currentVersion 当前版本号
+ * @param {string} prereleaseType 预发布类型 (beta 或 alpha)
+ * @returns {string} 下一个预发布版本号
+ */
+function getNextPrereleaseVersion(currentVersion, prereleaseType) {
+	// 检查当前版本是否已经是预发布版本
+	const prereleaseMatch = currentVersion.match(new RegExp(`^(\\d+\\.\\d+\\.\\d+)-${prereleaseType}\\.(\\d+)$`));
+	
+	if (prereleaseMatch) {
+		// 如果当前版本已经是同类型的预发布版本，递增预发布号
+		const baseVersion = prereleaseMatch[1];
+		const prereleaseNumber = parseInt(prereleaseMatch[2]) + 1;
+		return `${baseVersion}-${prereleaseType}.${prereleaseNumber}`;
+	} else {
+		// 如果当前版本不是预发布版本，创建新的预发布版本
+		const baseVersion = getNextPatchVersion(currentVersion);
+		return `${baseVersion}-${prereleaseType}.1`;
+	}
+}
+
+/**
  * 选择版本类型
  * @param {string} currentVersion 当前版本
  * @param {string} latestVersion 最新版本
@@ -101,26 +123,11 @@ async function selectVersionType(currentVersion, latestVersion) {
 		return customVersion;
 	}
 	
-	// 处理beta和alpha版本
+	// 处理beta和alpha版本 - 自动递增
 	if (versionType === 'beta' || versionType === 'alpha') {
-		const { prereleaseNumber } = await inquirer.prompt([
-			{
-				type: 'input',
-				name: 'prereleaseNumber',
-				message: `请输入${versionType}版本号 (默认为1):`,
-				default: '1',
-				validate: (input) => {
-					if (/^\d+$/.test(input)) {
-						return true;
-					}
-					return '请输入有效的数字';
-				}
-			}
-		]);
-		
-		// 生成预发布版本号
-		const baseVersion = getNextPatchVersion(currentVersion);
-		return `${baseVersion}-${versionType}.${prereleaseNumber}`;
+		const newVersion = getNextPrereleaseVersion(currentVersion, versionType);
+		console.log(`📝 自动生成${versionType}版本: ${newVersion}`);
+		return newVersion;
 	}
 	
 	return versionType;
@@ -156,6 +163,7 @@ module.exports = {
 	getLatestVersion,
 	getCurrentVersion,
 	getNextPatchVersion,
+	getNextPrereleaseVersion,
 	selectVersionType,
 	updateVersion,
 	packageName
