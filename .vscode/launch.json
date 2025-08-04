@@ -1,0 +1,73 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Pack Starter CLI",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/packages/pack-starter/dist/cli.js",
+      "args": ["build"],
+      "cwd": "${workspaceFolder}/packages/pack-starter",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": ["${workspaceFolder}/packages/pack-starter/dist/**/*.js"],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/packages/pack-starter/**",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "name": "Debug Pack Starter Serve",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/packages/pack-starter/dist/cli.js",
+      "args": ["serve"],
+      "cwd": "${workspaceFolder}/packages/pack-starter",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": ["${workspaceFolder}/packages/pack-starter/dist/**/*.js"],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/packages/pack-starter/**",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "name": "Debug Pack Starter Init",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/packages/pack-starter/dist/cli.js",
+      "args": ["init"],
+      "cwd": "${workspaceFolder}/packages/pack-starter",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": ["${workspaceFolder}/packages/pack-starter/dist/**/*.js"],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/packages/pack-starter/**",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "name": "Debug Pack Starter with Custom Args",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/packages/pack-starter/dist/cli.js",
+      "args": [],
+      "cwd": "${workspaceFolder}/packages/pack-starter",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": ["${workspaceFolder}/packages/pack-starter/dist/**/*.js"],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/packages/pack-starter/**",
+        "!**/node_modules/**"
+      ]
+    }
+  ]
+} 
