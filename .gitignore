@@ -10,3 +10,4 @@ dist
 *.njsproj
 *.sln
 *.sw?
+packages/pack-starter/test-project/
