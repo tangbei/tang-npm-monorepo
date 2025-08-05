@@ -5,7 +5,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "start:cli": "pnpm --filter @tang/cli start",
+    "start:cli": "pnpm --filter @tanggoat/pack-starter start",
     "release": "./scripts/release.sh --stable",
     "release:beta": "./scripts/release.sh --beta",
     "release:alpha": "./scripts/release.sh --alpha",

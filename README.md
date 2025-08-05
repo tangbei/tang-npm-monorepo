@@ -16,9 +16,10 @@
 - **特性**: 版本管理、git tag创建、npm登录引导
 - **版本**: 1.0.10-beta.3
 
-### 🛠️ [@tanggoat/tang-cli](./packages/tang-cli/README.md)
-通用CLI工具集
-- **功能**: 提供各种命令行工具和实用功能
+### 🛠️ [@tanggoat/pack-starter](./packages/pack-starter/README.md)
+项目启动器工具集
+- **功能**: 快速创建和初始化各种类型的项目模板
+- **特性**: 支持多种框架模板、交互式配置、代码规范预设
 - **状态**: 开发中
 
 ### 📚 [@tanggoat/tang-other](./packages/tang-other/README.md)
@@ -80,7 +81,7 @@ tang-npm-monorepo/
 ├── packages/
 │   ├── pack-start/          # 前端脚手架工具
 │   ├── npm-helper/          # npm发布工具
-│   ├── tang-cli/            # 通用CLI工具
+│   ├── pack-starter/        # 通用CLI工具
 │   └── tang-other/          # 其他工具库
 ├── pnpm-workspace.yaml      # pnpm workspace配置
 └── README.md               # 项目说明
