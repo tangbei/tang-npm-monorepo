@@ -1,6 +1,6 @@
 {
-  "name": "pack-starter",
-  "version": "1.0.0",
+  "name": "@tanggoat/pack-starter",
+  "version": "2.0.7",
   "description": "A powerful webpack5-based build tool with plugin architecture",
   "main": "dist/index.js",
   "bin": {

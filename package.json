@@ -6,6 +6,11 @@
   "main": "index.js",
   "scripts": {
     "start:cli": "pnpm --filter @tang/cli start",
+    "release": "./scripts/release.sh --stable",
+    "release:beta": "./scripts/release.sh --beta",
+    "release:alpha": "./scripts/release.sh --alpha",
+    "release:rc": "./scripts/release.sh --rc",
+    "release:dry-run": "./scripts/release.sh --stable --dry-run",
     "preinstall": "npx only-allow pnpm"
   },
   "keywords": [],
@@ -15,9 +20,14 @@
     "chalk": "^5.4.1"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.5",
     "@types/node": "^24.1.0",
     "ts-node": "^10.9.2",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3"
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
 }

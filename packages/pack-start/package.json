@@ -1,6 +1,6 @@
 {
   "name": "@tanggoat/pack-start",
-  "version": "1.0.3-beta.5",
+  "version": "1.0.3",
   "description": "基于webpack的前端脚手架工具",
   "main": "dist/bin/cli.js",
   "bin": {
@@ -36,7 +36,7 @@
     "ora": "^5.4.1"
   },
   "devDependencies": {
-    "@tanggoat/npm-helper": "workspace:1.0.10-beta.3",
+    "@tanggoat/npm-helper": "workspace:1.0.10",
     "@types/node": "^20.10.0"
   },
   "engines": {
