@@ -1,4 +1,4 @@
-# @tang-npm/request
+# @tanggoat/request
 
 ## 1.0.2
 

@@ -64,7 +64,7 @@ tang-npm-monorepo/
 - 必须为所有公共 API 提供类型定义
 
 #### 命名规范
-- 包名：`@tang-npm/[包名]`
+- 包名：`@tanggoat/[包名]`
 - 文件名：kebab-case
 - 类型名：PascalCase
 - 函数名：camelCase
@@ -139,12 +139,12 @@ pnpm run release:stable  # 发布稳定版本
 
 ### 构建特定包
 ```bash
-pnpm --filter @tang-npm/request build
+pnpm --filter @tanggoat/request build
 ```
 
 ### 开发模式
 ```bash
-pnpm --filter @tang-npm/request dev
+pnpm --filter @tanggoat/request dev
 ```
 
 ### 安装依赖
@@ -154,7 +154,7 @@ pnpm install
 
 ### 清理构建
 ```bash
-pnpm --filter @tang-npm/request clean
+pnpm --filter @tanggoat/request clean
 ```
 
 ## 注意事项

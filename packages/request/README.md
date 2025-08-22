@@ -1,4 +1,4 @@
-# @tang-npm/request
+# @tanggoat/request
 
 一个基于 Axios 的 TypeScript HTTP 请求库，提供强大的拦截器支持和类型安全。
 
@@ -16,13 +16,13 @@
 
 ```bash
 # 使用 npm
-npm install @tang-npm/request
+npm install @tanggoat/request
 
 # 使用 yarn
-yarn add @tang-npm/request
+yarn add @tanggoat/request
 
 # 使用 pnpm
-pnpm add @tang-npm/request
+pnpm add @tanggoat/request
 ```
 
 ## 🚀 快速开始
@@ -30,7 +30,7 @@ pnpm add @tang-npm/request
 ### 基础用法
 
 ```typescript
-import Request from '@tang-npm/request';
+import Request from '@tanggoat/request';
 
 // 创建请求实例
 const request = new Request({
@@ -53,7 +53,7 @@ console.log(response);
 ### 使用拦截器
 
 ```typescript
-import Request from '@tang-npm/request';
+import Request from '@tanggoat/request';
 
 const request = new Request({
   baseURL: 'https://api.example.com',

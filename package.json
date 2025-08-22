@@ -5,6 +5,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "demo": "pnpm --filter demo dev",
     "start:cli": "pnpm --filter @tanggoat/pack-starter start",
     "registry": "pnpm --filter @tanggoat/npm-helper registry",
     "release": "./scripts/release.sh --stable",
