@@ -127,15 +127,15 @@ prerelease_flow() {
     
     # 2. 进入预发布环境
     log "步骤 2: 进入预发布环境"
-    execute_command "pnpm changeset-$RELEASE_TYPE" "进入 $RELEASE_TYPE 预发布环境"
+    execute_command "pnpm changeset pre enter $RELEASE_TYPE" "进入 $RELEASE_TYPE 预发布环境"
     
     # 3. 更新版本号
     log "步骤 3: 更新版本号"
-    execute_command "pnpm changeset-version" "更新包版本号"
+    execute_command "pnpm changeset version" "更新包版本号"
     
     # 4. 发布到 npm
     log "步骤 4: 发布到 npm"
-    execute_command "pnpm changeset-publish" "发布包到 npm 仓库"
+    execute_command "pnpm changeset publish" "发布包到 npm 仓库"
     
     log_success "预发布流程完成！"
 }
@@ -146,7 +146,7 @@ stable_flow() {
     
     # 1. 退出预发布环境
     log "步骤 1: 退出预发布环境"
-    execute_command "pnpm changeset-exit" "退出预发布环境"
+    execute_command "pnpm changeset pre exit" "退出预发布环境"
     
     # 2. 创建 changeset
     log "步骤 2: 创建 changeset"
@@ -154,11 +154,11 @@ stable_flow() {
     
     # 3. 更新版本号
     log "步骤 3: 更新版本号"
-    execute_command "pnpm changeset-version" "更新包版本号"
+    execute_command "pnpm changeset version" "更新包版本号"
     
     # 4. 发布到 npm
     log "步骤 4: 发布到 npm"
-    execute_command "pnpm changeset-publish" "发布包到 npm 仓库"
+    execute_command "pnpm changeset publish" "发布包到 npm 仓库"
     
     log_success "稳定版本发布流程完成！"
 }

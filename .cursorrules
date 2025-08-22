@@ -1,0 +1,188 @@
+# Tang NPM Monorepo 工程规则
+
+## 工程概述
+
+`tang-npm-monorepo` 是一个基于 pnpm workspace 的 TypeScript monorepo 工程，主要用于开发和维护多个 NPM 包。该工程采用现代化的前端开发工具链，支持包的独立开发、构建、测试和发布。
+
+## 工程结构
+
+```
+tang-npm-monorepo/
+├── packages/           # 包目录
+│   ├── request/       # HTTP 请求库 (@tang-npm/request)
+│   │   ├── src/       # 源代码
+│   │   ├── types.ts   # 类型定义
+│   │   ├── index.ts   # 入口文件
+│   │   └── package.json
+│   └── [其他包]/
+├── apps/              # 应用目录
+│   └── demo/          # 演示应用
+├── scripts/           # 工程脚本
+│   └── release.sh     # 发布脚本
+├── .changeset/        # Changesets 配置
+├── pnpm-workspace.yaml # pnpm 工作区配置
+└── package.json       # 根包配置
+```
+
+## 技术栈
+
+- **包管理器**: pnpm (>=7.0.0)
+- **构建工具**: tsup, TypeScript
+- **版本管理**: @changesets/cli
+- **Node 版本**: >=18.0.0
+- **包格式**: CommonJS + ESM + TypeScript 声明文件
+
+## 开发规范
+
+### 1. 包开发规范
+
+#### 包结构要求
+- 每个包必须有完整的 `package.json`
+- 必须包含 `src/` 目录存放源代码
+- 必须包含 `types.ts` 或 `types/` 目录定义类型
+- 必须包含 `index.ts` 作为入口文件
+- 必须配置正确的 `main`、`module`、`types` 字段
+
+#### 构建配置
+- 使用 `tsup` 进行构建
+- 输出格式：CommonJS + ESM
+- 必须生成 TypeScript 声明文件
+- 支持 Tree-shaking 和代码压缩
+
+#### 依赖管理
+- 生产依赖放在 `dependencies`
+- 开发依赖放在 `devDependencies`
+- 使用 `workspace:*` 引用内部包
+- 外部依赖使用精确版本号
+
+### 2. 代码规范
+
+#### TypeScript 规范
+- 严格模式：`strict: true`
+- 目标版本：ES2018+
+- 模块解析：Node.js 风格
+- 必须为所有公共 API 提供类型定义
+
+#### 命名规范
+- 包名：`@tang-npm/[包名]`
+- 文件名：kebab-case
+- 类型名：PascalCase
+- 函数名：camelCase
+- 常量：UPPER_SNAKE_CASE
+
+#### 代码质量
+- 使用 ESLint 进行代码检查
+- 使用 Prettier 进行代码格式化
+- 必须通过 TypeScript 类型检查
+- 公共 API 必须有 JSDoc 注释
+
+### 3. 发布规范
+
+#### 版本管理
+- 使用 Changesets 管理版本
+- 遵循语义化版本规范
+- 支持预发布版本 (alpha, beta, rc)
+- 自动生成 CHANGELOG
+
+#### 发布流程
+1. 创建 changeset 文件
+2. 进入/退出预发布环境
+3. 更新版本号
+4. 构建所有包
+5. 发布到 NPM
+
+#### 发布命令
+```bash
+# 在根目录执行
+pnpm run release:beta    # 发布 beta 版本
+pnpm run release:alpha   # 发布 alpha 版本
+pnpm run release:rc      # 发布 rc 版本
+pnpm run release:stable  # 发布稳定版本
+```
+
+### 4. 工作区规范
+
+#### 包引用
+- 内部包使用 `workspace:*` 引用
+- 避免循环依赖
+- 共享类型定义放在 `types` 目录
+
+#### 脚本管理
+- 根目录定义通用脚本
+- 包内部定义包特定脚本
+- 使用 `pnpm --filter` 执行特定包命令
+
+## 开发流程
+
+### 1. 新包开发
+1. 在 `packages/` 下创建新目录
+2. 初始化 `package.json`
+3. 创建源代码结构
+4. 配置构建工具
+5. 添加到 workspace 配置
+
+### 2. 包更新流程
+1. 修改源代码
+2. 更新类型定义
+3. 本地测试构建
+4. 创建 changeset
+5. 提交代码
+
+### 3. 发布流程
+1. 确保所有代码已提交
+2. 运行发布脚本
+3. 选择发布类型
+4. 自动构建和发布
+5. 验证发布结果
+
+## 常见任务
+
+### 构建特定包
+```bash
+pnpm --filter @tang-npm/request build
+```
+
+### 开发模式
+```bash
+pnpm --filter @tang-npm/request dev
+```
+
+### 安装依赖
+```bash
+pnpm install
+```
+
+### 清理构建
+```bash
+pnpm --filter @tang-npm/request clean
+```
+
+## 注意事项
+
+1. **Node 版本**: 必须使用 Node.js >=18.0.0
+2. **pnpm 版本**: 必须使用 pnpm >=7.0.0
+3. **包名唯一性**: 确保包名在 NPM 上唯一
+4. **类型安全**: 所有公共 API 必须有类型定义
+5. **构建顺序**: 依赖包必须先构建
+6. **版本同步**: 相关包的版本应该保持同步
+
+## 故障排除
+
+### 构建失败
+- 检查 TypeScript 类型错误
+- 确认依赖包已构建
+- 验证 tsup 配置
+
+### 发布失败
+- 确认已登录 NPM
+- 检查包名是否冲突
+- 验证版本号格式
+
+### 依赖问题
+- 清理 node_modules 重新安装
+- 检查 workspace 配置
+- 确认包引用路径正确
+
+---
+
+**重要**: 这是一个 monorepo 工程，所有包共享相同的开发规范和发布流程。在开发时请遵循上述规范，确保代码质量和工程一致性。 

@@ -1,9 +1,9 @@
 {
-  "name": "@tang-npm/request",
-  "version": "1.0.0",
+  "name": "@tanggoat/request",
+  "version": "1.0.1",
   "description": "A TypeScript HTTP request library based on Axios",
   "main": "dist/index.js",
-  "module": "dist/index.esm.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
