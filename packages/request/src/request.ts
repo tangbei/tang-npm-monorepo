@@ -1,6 +1,6 @@
 import type { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import axios from 'axios';
-import type { CreateRequestConfig, RequestConfig, RequestInterceptors } from '../types';
+import type { CreateRequestConfig, RequestConfig, RequestInterceptors } from './types';
 
 class Request {
   instance: AxiosInstance;
@@ -27,7 +27,7 @@ class Request {
   requestInterceptors() {
     // 全局请求拦截器
     this.instance.interceptors.request.use((request: InternalAxiosRequestConfig) => {
-      console.log('全局请求拦截器request', request);
+      // console.log('全局请求拦截器request', request);
       const abortController = new AbortController();
       const url = request.url || '';
       request.signal = abortController.signal;
@@ -56,7 +56,7 @@ class Request {
 
     // 全局响应拦截器
     this.instance.interceptors.response.use((response: AxiosResponse) => {
-      console.log('全局响应拦截器response', response);
+      // console.log('全局响应拦截器response', response);
       const url = response.config.url || '';
       this.abortControllerMap.delete(url);
       return response.data;

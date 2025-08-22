@@ -29,6 +29,17 @@ log_warning() {
     echo -e "${YELLOW}[Release]⚠️${NC} $1"
 }
 
+# 检查是否在预发布模式
+check_pre_mode() {
+    if pnpm changeset status > /dev/null 2>&1; then
+        # 检查是否有预发布标记
+        if grep -q "prerelease" .changeset/pre.json 2>/dev/null; then
+            return 0  # 在预发布模式中
+        fi
+    fi
+    return 1  # 不在预发布模式中
+}
+
 # 显示帮助信息
 show_help() {
     echo -e "${BLUE}
@@ -144,9 +155,13 @@ prerelease_flow() {
 stable_flow() {
     log "开始稳定版本发布流程"
     
-    # 1. 退出预发布环境
-    log "步骤 1: 退出预发布环境"
-    execute_command "pnpm changeset pre exit" "退出预发布环境"
+    # 1. 检查并退出预发布环境（如果存在）
+    if check_pre_mode; then
+        log "检测到预发布模式，正在退出..."
+        execute_command "pnpm changeset pre exit" "退出预发布环境"
+    else
+        log "当前不在预发布模式中，跳过退出步骤"
+    fi
     
     # 2. 创建 changeset
     log "步骤 2: 创建 changeset"

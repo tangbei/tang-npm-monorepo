@@ -1,5 +1,11 @@
 # @tang-npm/request
 
+## 1.0.2
+
+### Patch Changes
+
+- 代码优化提交
+
 ## 1.0.1
 
 ### Patch Changes

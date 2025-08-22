@@ -22,7 +22,7 @@ importers:
   apps/demo:
     specifiers:
       '@eslint/js': ^9.33.0
-      '@tang-npm/request': workspace:*
+      '@tanggoat/request': workspace:1.0.1
       '@types/react': ^19.1.10
       '@types/react-dom': ^19.1.7
       '@vitejs/plugin-react': ^5.0.0
@@ -36,7 +36,7 @@ importers:
       typescript-eslint: ^8.39.1
       vite: ^7.1.2
     dependencies:
-      '@tang-npm/request': link:../../packages/request
+      '@tanggoat/request': link:../../packages/request
       react: 19.1.1
       react-dom: 19.1.1_react@19.1.1
     devDependencies:

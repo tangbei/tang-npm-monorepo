@@ -1,5 +1,5 @@
-import type { AxiosResponse, InternalAxiosRequestConfig, RequestConfig } from '@tang-npm/request';
-import Request from '@tang-npm/request';
+import type { AxiosResponse, InternalAxiosRequestConfig, RequestConfig } from '@tanggoat/request';
+import Request from '@tanggoat/request';
 
 type TBResponse<T> = {
   code: number;
@@ -15,6 +15,9 @@ interface TBRequestConfig<T, R> extends Omit<RequestConfig<TBResponse<R>>, 'head
 
 const requestInterceptors = (config: RequestConfig) => {
   console.log('实例请求拦截config', config);
+  config.headers = {
+    ...config.headers,
+  } as unknown as InternalAxiosRequestConfig['headers'];
   return config;
 }
 

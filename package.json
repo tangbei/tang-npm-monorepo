@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start:cli": "pnpm --filter @tanggoat/pack-starter start",
+    "registry": "pnpm --filter @tanggoat/npm-helper registry",
     "release": "./scripts/release.sh --stable",
     "release:beta": "./scripts/release.sh --beta",
     "release:alpha": "./scripts/release.sh --alpha",
