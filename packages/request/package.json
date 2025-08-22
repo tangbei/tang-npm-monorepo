@@ -1,0 +1,38 @@
+{
+  "name": "@tang-npm/request",
+  "version": "1.0.0",
+  "description": "A TypeScript HTTP request library based on Axios",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "http",
+    "request",
+    "axios",
+    "typescript",
+    "interceptor"
+  ],
+  "author": "tangbei",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "1.11.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "rimraf": "^5.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
