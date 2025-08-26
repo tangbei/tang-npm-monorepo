@@ -22,7 +22,7 @@ importers:
   apps/demo:
     specifiers:
       '@eslint/js': ^9.33.0
-      '@tanggoat/request': workspace:1.0.1
+      '@tanggoat/request': workspace:*
       '@types/react': ^19.1.10
       '@types/react-dom': ^19.1.7
       '@vitejs/plugin-react': ^5.0.0
@@ -195,11 +195,13 @@ importers:
   packages/request:
     specifiers:
       axios: 1.11.0
+      qs: ^6.14.0
       rimraf: ^5.0.0
       tsup: ^8.0.0
       typescript: ^5.0.0
     dependencies:
       axios: 1.11.0
+      qs: 6.14.0
     devDependencies:
       rimraf: 5.0.10
       tsup: 8.5.0_typescript@5.8.3
@@ -8509,6 +8511,13 @@ packages:
 
   /qs/6.13.0:
     resolution: {integrity: sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==}
+    engines: {node: '>=0.6'}
+    dependencies:
+      side-channel: 1.1.0
+    dev: false
+
+  /qs/6.14.0:
+    resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.1.0

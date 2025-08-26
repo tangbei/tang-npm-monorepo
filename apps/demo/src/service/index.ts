@@ -8,21 +8,21 @@ type TBResponse<T> = {
 };
 
 // 重写返回类型
-interface TBRequestConfig<T, R> extends Omit<RequestConfig<TBResponse<R>>, 'headers'> {
+interface TBRequestConfig<D, T> extends Omit<RequestConfig<TBResponse<T>>, 'headers'> {
   headers?: InternalAxiosRequestConfig['headers'],
-  data?: T
+  data?: D
 }
 
 const requestInterceptors = (config: RequestConfig) => {
-  console.log('实例请求拦截config', config);
+  // console.log('实例请求拦截config', config);
   config.headers = {
     ...config.headers,
   } as unknown as InternalAxiosRequestConfig['headers'];
   return config;
 }
 
-const responseInterceptors = (res: AxiosResponse<TBResponse<any>>) => {
-  console.log('实例响应拦截res', res);
+const responseInterceptors = <T>(res: AxiosResponse<TBResponse<T>>) => {
+  // console.log('实例响应拦截res', res);
   return res;
 }
 
@@ -52,7 +52,7 @@ const TBRequest = <D, T>(config: TBRequestConfig<D, T>) => {
   }
   return request.request<TBResponse<T>>({
     ...config,
-    headers: config?.headers || {} as unknown as InternalAxiosRequestConfig['headers']
+    headers: config?.headers || {} as InternalAxiosRequestConfig['headers']
   });
 };
  

@@ -1,6 +1,6 @@
 {
   "name": "@tanggoat/request",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "A TypeScript HTTP request library based on Axios",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -11,6 +11,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
+    "dev2": "tsup src/index.ts --format cjs,esm --dts --watch --sourcemap",
     "clean": "rimraf dist",
     "prepublishOnly": "npm run clean && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,12 +26,13 @@
   "author": "tangbei",
   "license": "MIT",
   "dependencies": {
-    "axios": "1.11.0"
+    "axios": "1.11.0",
+    "qs": "^6.14.0"
   },
   "devDependencies": {
+    "rimraf": "^5.0.0",
     "tsup": "^8.0.0",
-    "typescript": "^5.0.0",
-    "rimraf": "^5.0.0"
+    "typescript": "^5.0.0"
   },
   "publishConfig": {
     "access": "public"

@@ -14,16 +14,8 @@ function App() {
       data: {
         areacode: '101010100',
       },
-      interceptors: {
-        requestInterceptors: (config) => {
-          console.log('单个请求拦截config', config);
-          return config;
-        },
-        responseInterceptors: (res) => {
-          console.log('单个响应拦截res', res);
-          return res;
-        }
-      }
+      retryConfig: true,
+      noRepeatRequest: true,
     }).then(res => {
       console.log('res', res);
     }).catch(err => {

@@ -17,8 +17,16 @@ export interface CreateRequestConfig<T = AxiosResponse> extends CreateAxiosDefau
   interceptors?: RequestInterceptors<T>;
 }
 
+// 重试配置
+export type IRetryConfig = {
+  retryCount?: number;        // 重试次数，默认2次
+  retryDelay?: number;        // 重试延迟时间(毫秒)，默认1000ms
+  retryCondition?: (error: any, attempt: number) => boolean; // 重试条件
+}
 export interface RequestConfig<T = AxiosResponse> extends InternalAxiosRequestConfig {
   interceptors?: RequestInterceptors<T>;
+  noRepeatRequest?: boolean;
+  retryConfig?: IRetryConfig | boolean;
 }
 
 export type { AxiosResponse, InternalAxiosRequestConfig };

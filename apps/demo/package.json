@@ -1,7 +1,7 @@
 {
   "name": "demo",
   "private": true,
-  "version": "0.0.1-beta.0",
+  "version": "0.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tanggoat/request": "workspace:1.0.1",
+    "@tanggoat/request": "workspace:*",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },

@@ -1,307 +1,248 @@
 # @tanggoat/request
 
-一个基于 Axios 的 TypeScript HTTP 请求库，提供强大的拦截器支持和类型安全。
+一个基于 Axios 的 TypeScript HTTP 请求库，提供强大的拦截器、自动重试、请求去重与取消能力，且对类型推断友好。
 
 ## ✨ 特性
 
-- 🚀 **基于 Axios**: 基于成熟的 Axios 库，稳定可靠
-- 🔧 **TypeScript 支持**: 完整的类型定义，开发体验优秀
-- 🎯 **拦截器系统**: 支持请求和响应拦截器，灵活可扩展
-- 📦 **多格式输出**: 支持 CommonJS 和 ES Module 格式
-- 🌳 **Tree-shaking**: 支持现代打包工具的 Tree-shaking 优化
-- 🎨 **拦截器链**: 支持全局拦截器和单个请求拦截器
-- 🚫 **请求取消**: 支持请求取消和批量取消功能
+- 🚀 基于 Axios，稳定可靠
+- 🔧 完整 TypeScript 类型定义
+- 🧱 拦截器链：全局 + 实例 + 单请求三级拦截
+- ♻️ 自动重试：支持重试次数/延迟/自定义条件，或一键开启默认策略
+- 🚫 请求去重：在窗口期内自动取消重复请求
+- ⛔️ 请求取消：支持按 URL 取消与批量取消
+- 📦 多格式输出：CJS + ESM + d.ts
 
 ## 📦 安装
 
 ```bash
-# 使用 npm
+# npm
 npm install @tanggoat/request
-
-# 使用 yarn
+# yarn
 yarn add @tanggoat/request
-
-# 使用 pnpm
+# pnpm
 pnpm add @tanggoat/request
 ```
 
 ## 🚀 快速开始
 
-### 基础用法
-
-```typescript
+```ts
 import Request from '@tanggoat/request';
 
-// 创建请求实例
 const request = new Request({
   baseURL: 'https://api.example.com',
-  timeout: 10000,
-  headers: {
-    'Authorization': 'Bearer your-token'
+  timeout: 10000
+});
+
+// 基础请求
+type User = { id: string; name: string };
+request.request<User>({ url: '/users/1', method: 'GET' }).then(console.log);
+```
+
+## 🧱 拦截器
+
+拦截器执行顺序（请求发起到响应返回）：
+- 接口请求 → 实例请求 → 全局请求 → 实例响应 → 全局响应 → 接口响应
+
+```ts
+const request = new Request({
+  baseURL: 'https://api.example.com',
+  interceptors: {
+    requestInterceptors: (config) => {
+      // 实例级请求拦截
+      return config;
+    },
+    responseInterceptors: (response) => {
+      // 实例级响应拦截（在全局响应拦截之后）
+      return response;
+    },
   }
 });
 
-// 发送请求
-const response = await request.request({
+// 单请求拦截器
+request.request({
   url: '/users',
-  method: 'GET'
+  method: 'GET',
+  interceptors: {
+    requestInterceptors: (cfg) => ({ ...cfg }),
+    responseInterceptors: (res) => res,
+  }
 });
-
-console.log(response);
 ```
 
-### 使用拦截器
+## ♻️ 自动重试（retryConfig）
 
-```typescript
-import Request from '@tanggoat/request';
+为单个请求开启自动重试：
 
-const request = new Request({
-  baseURL: 'https://api.example.com',
-  interceptors: {
-    // 请求拦截器
-    requestInterceptors: (config) => {
-      console.log('发送请求:', config);
-      // 可以在这里修改请求配置
-      config.headers = {
-        ...config.headers,
-        'X-Custom-Header': 'value'
-      };
-      return config;
-    },
-    
-    // 响应拦截器
-    responseInterceptors: (response) => {
-      console.log('收到响应:', response);
-      // 可以在这里处理响应数据
-      return response.data;
-    },
-    
-    // 请求错误拦截器
-    requestInterceptorsCatch: (error) => {
-      console.error('请求错误:', error);
-      return Promise.reject(error);
-    },
-    
-    // 响应错误拦截器
-    responseInterceptorsCatch: (error) => {
-      console.error('响应错误:', error);
-      return Promise.reject(error);
+```ts
+// 方式一：使用默认策略（等价于 { retryCount: 2, retryDelay: 1000 }）
+request.request({ url: '/unstable', method: 'GET', retryConfig: true });
+
+// 方式二：自定义策略
+request.request({
+  url: '/unstable',
+  method: 'GET',
+  retryConfig: {
+    retryCount: 3,            // 重试次数（默认 2）
+    retryDelay: 1500,         // 重试间隔毫秒（默认 1000）
+    retryCondition: (error, attempt) => {
+      // 返回 true 才会继续重试
+      return !error.response || error.response.status >= 500;
     }
   }
 });
 ```
 
-## 📚 API 文档
+默认重试条件（当未提供 retryCondition 时）：
+- 不是手动取消（非 axios.isCancel）
+- 无响应（网络错误/超时）或 HTTP 5xx 或 429
 
-### Request 类
+库内默认值与默认条件由 `./util` 提供：
+- `DEFAULT_RETRY_COUNT`、`DEFAULT_RETRY_DELAY`
+- `defaultRetryCondition(error, attempt)`
 
-#### 构造函数
+## 🧯 请求去重（noRepeatRequest）
 
-```typescript
-new Request(config: CreateRequestConfig)
+在指定时间窗口内取消重复请求（默认窗口 2000ms）：
+
+```ts
+request.request({ url: '/list', method: 'GET', noRepeatRequest: true });
 ```
 
-**配置选项:**
+说明：同一 URL 在窗口期内仅允许第一条通过，其余自动取消（内部通过 AbortController 实现）。
 
-| 参数 | 类型 | 必填 | 描述 |
-|------|------|------|------|
-| `baseURL` | `string` | 否 | 基础 URL |
-| `timeout` | `number` | 否 | 请求超时时间（毫秒） |
-| `headers` | `Record<string, string>` | 否 | 默认请求头 |
-| `interceptors` | `RequestInterceptors` | 否 | 拦截器配置 |
+## ⛔️ 取消请求
 
-#### 方法
-
-##### `request<T>(config: RequestConfig<T>): Promise<T>`
-
-发送 HTTP 请求。
-
-**参数:**
-- `config`: 请求配置对象
-
-**返回值:**
-- `Promise<T>`: 响应数据的 Promise
-
-**配置选项:**
-
-| 参数 | 类型 | 必填 | 描述 |
-|------|------|------|------|
-| `url` | `string` | 是 | 请求 URL |
-| `method` | `string` | 否 | HTTP 方法（默认: GET） |
-| `data` | `any` | 否 | 请求体数据 |
-| `params` | `any` | 否 | URL 查询参数 |
-| `headers` | `Record<string, string>` | 否 | 请求头 |
-| `interceptors` | `RequestInterceptors` | 否 | 单个请求的拦截器 |
-
-##### `cancelRequest(url: string | string[]): void`
-
-取消指定的请求。
-
-**参数:**
-- `url`: 要取消的请求 URL 或 URL 数组
-
-##### `cancelAllRequest(): void`
-
-取消所有正在进行的请求。
-
-### 拦截器类型
-
-#### RequestInterceptors
-
-```typescript
-interface RequestInterceptors<T> {
-  requestInterceptors?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig;
-  requestInterceptorsCatch?: (err: any) => any;
-  responseInterceptors?: (config: T) => T;
-  responseInterceptorsCatch?: (err: any) => any;
-}
-```
-
-## 🔧 高级用法
-
-### 单个请求拦截器
-
-```typescript
-const response = await request.request({
-  url: '/api/users',
-  method: 'POST',
-  data: { name: 'John' },
-  interceptors: {
-    requestInterceptors: (config) => {
-      // 为这个特定请求添加特殊处理
-      config.headers['X-Request-ID'] = generateRequestId();
-      return config;
-    },
-    responseInterceptors: (response) => {
-      // 处理这个特定请求的响应
-      return transformResponse(response);
-    }
-  }
-});
-```
-
-### 错误处理
-
-```typescript
-try {
-  const response = await request.request({
-    url: '/api/users',
-    method: 'GET'
-  });
-} catch (error) {
-  if (error.response) {
-    // 服务器响应了错误状态码
-    console.error('响应错误:', error.response.status, error.response.data);
-  } else if (error.request) {
-    // 请求已发出但没有收到响应
-    console.error('请求错误:', error.request);
-  } else {
-    // 设置请求时发生错误
-    console.error('错误:', error.message);
-  }
-}
-```
-
-### 请求取消
-
-```typescript
-// 发送请求
-const responsePromise = request.request({
-  url: '/api/long-running-task',
-  method: 'POST'
-});
-
-// 在某个时刻取消请求
-setTimeout(() => {
-  request.cancelRequest('/api/long-running-task');
-}, 5000);
-
-// 或者取消所有请求
+```ts
+// 取消指定 URL
+request.cancelRequest('/tasks');
+// 批量取消
+request.cancelRequest(['/a', '/b']);
+// 取消全部
 request.cancelAllRequest();
 ```
 
-## 📝 类型定义
+## 🧩 API 文档
 
-### 基础类型
+### 类型
 
-```typescript
-// 请求配置
-interface RequestConfig<T = AxiosResponse> extends InternalAxiosRequestConfig {
+```ts
+import type { CreateRequestConfig, RequestConfig, RequestInterceptors } from '@tanggoat/request';
+
+// 重试配置
+export type IRetryConfig = {
+  retryCount?: number;                                 // 默认 2
+  retryDelay?: number;                                 // 默认 1000ms
+  retryCondition?: (error: any, attempt: number) => boolean; // 返回 true 则继续重试
+}
+
+// 请求配置（节选）
+export interface RequestConfig<T = AxiosResponse> extends InternalAxiosRequestConfig {
   interceptors?: RequestInterceptors<T>;
-}
-
-// 拦截器
-interface RequestInterceptors<T> {
-  requestInterceptors?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig;
-  requestInterceptorsCatch?: (err: any) => any;
-  responseInterceptors?: (config: T) => T;
-  responseInterceptorsCatch?: (err: any) => any;
-}
-
-// 创建配置
-interface CreateRequestConfig<T = AxiosResponse> extends CreateAxiosDefaults {
-  interceptors?: RequestInterceptors<T>;
+  noRepeatRequest?: boolean;
+  retryConfig?: IRetryConfig | boolean;                // true 表示启用默认重试策略
 }
 ```
 
-## 🧪 开发
+### 类
 
-### 本地开发
-
-```bash
-# 克隆仓库
-git clone <repository-url>
-cd tang-npm-monorepo
-
-# 安装依赖
-pnpm install
-
-# 进入 request 包目录
-cd packages/request
-
-# 开发模式（监听文件变化）
-pnpm dev
-
-# 构建
-pnpm build
-
-# 清理构建文件
-pnpm clean
+```ts
+new Request(config: CreateRequestConfig)
 ```
 
-### 测试构建
+- 常用方法
+  - `request<T>(config: RequestConfig<T>): Promise<T>`
+  - `cancelRequest(url: string | string[]): void`
+  - `cancelAllRequest(): void`
 
-```bash
-# 构建项目
-pnpm build
+## 🧪 示例
 
-# 检查构建结果
-ls -la dist/
+### 1) 搭配实例拦截器与单请求拦截器
+```ts
+const request = new Request({
+  baseURL: 'https://api.example.com',
+  interceptors: {
+    requestInterceptors: (cfg) => ({ ...cfg }),
+    responseInterceptors: (res) => res,
+  }
+});
+
+request.request({
+  url: '/users',
+  method: 'GET',
+  interceptors: {
+    requestInterceptors: (cfg) => ({ ...cfg, headers: { ...cfg.headers, 'X-Req': '1' } }),
+    responseInterceptors: (res) => res,
+  }
+});
 ```
 
-## 📦 发布
+### 2) 自动重试
+```ts
+// 默认重试
+request.request({ url: '/ping', method: 'GET', retryConfig: true });
 
-```bash
-# 发布补丁版本
-pnpm run publish:patch
-
-# 发布次要版本
-pnpm run publish:minor
-
-# 发布主要版本
-pnpm run publish:major
+// 自定义重试
+request.request({
+  url: '/ping',
+  method: 'GET',
+  retryConfig: { retryCount: 3, retryDelay: 2000 }
+});
 ```
 
-## 🤝 贡献
+### 3) 请求去重 + 取消
+```ts
+request.request({ url: '/list', method: 'GET', noRepeatRequest: true });
+// 稍后取消
+request.cancelRequest('/list');
+```
 
-欢迎提交 Issue 和 Pull Request！
+## 🏗️ 在 Monorepo 中实时联调
 
-## 📄 许可证
+使用 pnpm workspace：
 
-MIT License
+- 根目录 `pnpm-workspace.yaml`
+```yaml
+packages:
+  - "packages/*"
+  - "apps/*"
+```
 
-## 🔗 相关链接
+- 在 app 里声明依赖（例如 demo 应用）
+```json
+{
+  "dependencies": {
+    "@tanggoat/request": "workspace:*"
+  }
+}
+```
 
-- [Axios 官方文档](https://axios-http.com/)
-- [TypeScript 官方文档](https://www.typescriptlang.org/)
-- [NPM 包页面](https://www.npmjs.com/package/@tang-npm/request) 
+- 在 request 包内提供脚本（示例）
+```json
+{
+  "scripts": {
+    "build": "rimraf dist && tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --sourcemap",
+    "clean": "rimraf dist"
+  }
+}
+```
+
+- 同时启动两个终端：
+  - request 包：`pnpm --filter @tanggoat/request dev`
+  - demo 应用：`pnpm --filter demo dev`
+
+当你修改 `packages/request/src/**` 时，tsup 会增量编译到 `dist/`，apps 会实时感知更新。
+
+## 📦 发布（建议）
+
+- 入口与导出指向 dist 构建产物：
+  - `main: dist/index.cjs`
+  - `module: dist/index.mjs`
+  - `types: dist/index.d.ts`
+  - `files: ["dist"]`
+- 使用 `prepublishOnly` 自动构建：`"prepublishOnly": "pnpm build"`
+- 可引入 Changesets 管理版本（可选）
+
+## 📝 许可证
+
+MIT 

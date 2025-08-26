@@ -1,5 +1,23 @@
 # @tanggoat/request
 
+## 1.0.5
+
+### Patch Changes
+
+- y
+
+## 1.0.4
+
+### Patch Changes
+
+- 新增禁止接口重复请求功能，新增接口重试机制
+
+## 1.0.3
+
+### Patch Changes
+
+- 新增接口重试功能，新增窗口期内重复请求限制功能
+
 ## 1.0.2
 
 ### Patch Changes
