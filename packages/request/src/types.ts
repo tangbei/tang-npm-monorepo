@@ -7,7 +7,7 @@ export interface RequestInterceptors<T> {
   requestInterceptorsCatch?: (err: any) => any;
   
   // 响应拦截
-  responseInterceptors?: (config: T) => T;
+  responseInterceptors?: (res: T) => T;
 
   responseInterceptorsCatch?: (err: any) => any;
 }

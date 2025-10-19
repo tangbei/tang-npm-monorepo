@@ -21,9 +21,9 @@ const requestInterceptors = (config: RequestConfig) => {
   return config;
 }
 
-const responseInterceptors = <T>(res: AxiosResponse<TBResponse<T>>) => {
+const responseInterceptors = <T>(response: AxiosResponse<TBResponse<T>>) => {
   // console.log('实例响应拦截res', res);
-  return res;
+  return response;
 }
 
 const request = new Request({
@@ -32,11 +32,15 @@ const request = new Request({
   headers: {
     'X-Apispace-Token': 'vbik3r8q7nmm1pi08gtt0eppd3xhegdz'
   },
-  interceptors: {
-    requestInterceptors,
-    responseInterceptors,
-  }
+  // interceptors: {
+  //   requestInterceptors,
+  //   responseInterceptors,
+  // }
 });
+
+// 使用动态设置拦截器方法
+request.setRequestInterceptor(requestInterceptors);
+request.setResponseInterceptor(responseInterceptors);
 
 /**
  * 请求方法

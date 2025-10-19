@@ -40,6 +40,17 @@ check_pre_mode() {
     return 1  # 不在预发布模式中
 }
 
+# 检查当前预发布环境类型
+get_current_pre_mode() {
+    if [ -f ".changeset/pre.json" ]; then
+        # 从 pre.json 文件中提取当前预发布类型
+        local current_mode=$(grep -o '"tag":"[^"]*"' .changeset/pre.json 2>/dev/null | sed 's/"tag":"\([^"]*\)"/\1/')
+        echo "$current_mode"
+    else
+        echo ""
+    fi
+}
+
 # 显示帮助信息
 show_help() {
     echo -e "${BLUE}
@@ -132,13 +143,27 @@ execute_command() {
 prerelease_flow() {
     log "开始预发布流程 - 类型: $RELEASE_TYPE"
     
-    # 1. 创建 changeset
-    log "步骤 1: 创建 changeset"
-    execute_command "pnpm changeset" "创建 changeset 文件"
+    # 检查当前预发布环境
+    local current_mode=$(get_current_pre_mode)
     
-    # 2. 进入预发布环境
-    log "步骤 2: 进入预发布环境"
-    execute_command "pnpm changeset pre enter $RELEASE_TYPE" "进入 $RELEASE_TYPE 预发布环境"
+    if [ -n "$current_mode" ]; then
+        if [ "$current_mode" = "$RELEASE_TYPE" ]; then
+            log "当前已在 $RELEASE_TYPE 预发布环境中，跳过进入步骤"
+        else
+            log_warning "当前在 $current_mode 预发布环境中，需要先退出"
+            execute_command "pnpm changeset pre exit" "退出当前预发布环境"
+            log "步骤 2: 进入 $RELEASE_TYPE 预发布环境"
+            execute_command "pnpm changeset pre enter $RELEASE_TYPE" "进入 $RELEASE_TYPE 预发布环境"
+        fi
+    else
+        # 1. 创建 changeset
+        log "步骤 1: 创建 changeset"
+        execute_command "pnpm changeset" "创建 changeset 文件"
+        
+        # 2. 进入预发布环境
+        log "步骤 2: 进入预发布环境"
+        execute_command "pnpm changeset pre enter $RELEASE_TYPE" "进入 $RELEASE_TYPE 预发布环境"
+    fi
     
     # 3. 更新版本号
     log "步骤 3: 更新版本号"

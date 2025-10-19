@@ -222,7 +222,7 @@ class Request {
    * @param onRejected 响应失败拦截器
    */
   setResponseInterceptor(
-    onFulfilled?: <T>(response: AxiosResponse<T>) => AxiosResponse<T>,
+    onFulfilled?: (response: AxiosResponse) => AxiosResponse,
     onRejected?: (error: any) => any
   ) {
     if (onFulfilled) {

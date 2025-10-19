@@ -1,5 +1,13 @@
 # @tanggoat/request
 
+## 2.0.0-beta.1
+
+### Major Changes
+
+- 拦截器响应优化
+- 拦截器响应优化
+- 拦截器响应优化
+
 ## 2.0.0-beta.0
 
 ### Major Changes
