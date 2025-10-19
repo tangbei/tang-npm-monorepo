@@ -1,5 +1,12 @@
 # demo
 
+## 0.0.4-beta.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @tanggoat/request@2.0.0-beta.0
+
 ## 0.0.3
 
 ### Patch Changes

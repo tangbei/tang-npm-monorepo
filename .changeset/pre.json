@@ -1,0 +1,15 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "demo": "0.0.3",
+    "@tanggoat/npm-helper": "1.0.10",
+    "@tanggoat/pack-start": "1.0.3",
+    "@tanggoat/pack-starter": "2.0.7",
+    "@tanggoat/request": "1.0.5",
+    "@tanggoat/tang-other": "1.0.7"
+  },
+  "changesets": [
+    "deep-mails-accept"
+  ]
+}

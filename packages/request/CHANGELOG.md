@@ -1,5 +1,11 @@
 # @tanggoat/request
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- 增加拦截器的设置
+
 ## 1.0.5
 
 ### Patch Changes

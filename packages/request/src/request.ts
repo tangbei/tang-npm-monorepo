@@ -30,6 +30,9 @@ class Request {
    * 接口请求拦截器
    */
   requestInterceptors() {
+    // 清除现有的实例拦截器（保留全局拦截器）
+    this.instance.interceptors.request.clear();
+    
     // 全局请求拦截器
     this.instance.interceptors.request.use((requestConfig: RequestConfig) => {
       // console.log('全局请求拦截器request', request);
@@ -45,21 +48,28 @@ class Request {
     });
 
     // 实例请求拦截器
-    this.instance.interceptors.request.use(
-      this.interceptors?.requestInterceptors,
-      this.interceptors?.requestInterceptorsCatch
-    );
+    if (this.interceptors?.requestInterceptors) {
+      this.instance.interceptors.request.use(
+        this.interceptors.requestInterceptors,
+        this.interceptors?.requestInterceptorsCatch
+      );
+    }
   }
 
   /**
    * 接口响应拦截器
    */
   responseInterceptors() {
+    // 清除现有的实例拦截器（保留全局拦截器）
+    this.instance.interceptors.response.clear();
+    
     // 实例响应拦截器
-    this.instance.interceptors.response.use(
-      this.interceptors?.responseInterceptors,
-      this.interceptors?.responseInterceptorsCatch
-    );
+    if (this.interceptors?.responseInterceptors) {
+      this.instance.interceptors.response.use(
+        this.interceptors.responseInterceptors,
+        this.interceptors?.responseInterceptorsCatch
+      );
+    }
 
     // 全局响应拦截器
     this.instance.interceptors.response.use((response: AxiosResponse) => {
@@ -184,6 +194,56 @@ class Request {
       abortController.abort();
     });
     this.abortControllerMap.clear();
+  }
+
+  /**
+   * 动态设置请求拦截器
+   * @param onFulfilled 请求成功拦截器
+   * @param onRejected 请求失败拦截器
+   */
+  setRequestInterceptor(
+    onFulfilled?: (config: RequestConfig) => RequestConfig,
+    onRejected?: (error: any) => any
+  ) {
+    if (onFulfilled) {
+      this.interceptors.requestInterceptors = onFulfilled;
+    }
+    if (onRejected) {
+      this.interceptors.requestInterceptorsCatch = onRejected;
+    }
+    
+    // 重新设置拦截器
+    this.requestInterceptors();
+  }
+
+  /**
+   * 动态设置响应拦截器
+   * @param onFulfilled 响应成功拦截器
+   * @param onRejected 响应失败拦截器
+   */
+  setResponseInterceptor(
+    onFulfilled?: <T>(response: AxiosResponse<T>) => AxiosResponse<T>,
+    onRejected?: (error: any) => any
+  ) {
+    if (onFulfilled) {
+      this.interceptors.responseInterceptors = onFulfilled;
+    }
+    if (onRejected) {
+      this.interceptors.responseInterceptorsCatch = onRejected;
+    }
+    
+    // 重新设置拦截器
+    this.responseInterceptors();
+  }
+
+  /**
+   * 清除所有拦截器
+   */
+  clearInterceptors() {
+    this.interceptors = {};
+    // 重新设置拦截器（只保留全局拦截器）
+    this.requestInterceptors();
+    this.responseInterceptors();
   }
 }
 
